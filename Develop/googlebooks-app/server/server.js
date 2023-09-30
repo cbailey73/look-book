@@ -14,6 +14,13 @@ const PORT = process.env.PORT || 3001;
 const server = new ApolloServer({
   typeDefs,
   resolvers,
+  // context: ({ req }) => {
+  //   const context = {
+  //     user: req.user,
+  //   };
+    
+  //   return context;
+  // },
 });
 
 const startApolloServer = async () => {
