@@ -5,7 +5,7 @@ const { signToken, AuthenticationError } = require('../utils/auth');
 const resolvers = {
   Query: {
     user: async (parent, { username }) => {
-      return User.findOne({ username }).populate('savedBooks');
+      return User.findOne({ username }).populate('books');
     },
     books: async () => {
         return Book.find().sort({ title: 1 })
@@ -13,15 +13,12 @@ const resolvers = {
     bookById: async (parent, { bookId }) => {
         return Book.findOne({ _id: bookId });
     },
-    booksByTitle: async (parent, { title }) => {
-        return Book.find({ title });
-    },
-    booksByAuthor: async (parent, {author}) => {
-        return Book.find({author});
-    },
+    // booksByAuthor: async (parent, {author}) => {
+    //     return Book.find({author});
+    // },
     myBooks: async (parent, args, context) => {
       if (context.user) {
-        return User.findOne({ _id: context.user._id }).populate('savedBooks');
+        return User.findOne({ _id: context.user._id }).populate('books');
       } else {
         throw new AuthenticationError('You need to be logged in!');
       }
@@ -50,11 +47,6 @@ const resolvers = {
       const token = signToken(user);
 
       return { token, user };
-    },
-    // adding books
-    addBook: async (parent, {authors, description, bookId, image, link, title}) => {
-        const book = await Book.create({authors, description, bookId, image, link, title});
-        return { book };
     },
     saveBook: async (parent, { bookId }, context) => {
       // Mutation to save a book to the user's account.
