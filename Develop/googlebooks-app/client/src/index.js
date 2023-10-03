@@ -6,9 +6,9 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import App from './App.jsx';
 // import Profile from './pages/Profile';
-import SavedBooks from './pages/SavedBooks.jsx';
-import SearchBooks from './pages/SearchBooks.jsx';
-import ErrorPage from './pages/ErrorPage.jsx';
+import SavedBooks from './pages/SavedBooks';
+import SearchBooks from './pages/SearchBooks';
+import ErrorPage from './pages/ErrorPage';
 
 const router = createBrowserRouter([
   {
