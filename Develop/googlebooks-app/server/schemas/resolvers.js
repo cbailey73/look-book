@@ -5,7 +5,7 @@ const { signToken, AuthenticationError } = require('../utils/auth');
 const resolvers = {
   Query: {
     user: async (parent, { username }) => {
-      return User.findOne({ username }).populate('books');
+      return User.findOne({ username }).populate('savedBooks');
     },
     books: async () => {
         return Book.find().sort({ title: 1 })
@@ -18,7 +18,7 @@ const resolvers = {
     // },
     myBooks: async (parent, args, context) => {
       if (context.user) {
-        return User.findOne({ _id: context.user._id }).populate('books');
+        return User.findOne({ _id: context.user._id }).populate('savedBooks');
       } else {
         throw new AuthenticationError('You need to be logged in!');
       }
