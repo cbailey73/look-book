@@ -4,7 +4,6 @@ import { Form, Button, Alert } from 'react-bootstrap';
 
 // import { createUser } from '../utils/API';
 import { ADD_USER } from '../../utils/mutations';
-import { addUser, login } from '../../../../server/schemas/resolvers';
 
 import Auth from '../../utils/auth';
 
