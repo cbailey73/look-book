@@ -1,4 +1,5 @@
 // import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useMutation, useQuery } from '@apollo/client';
 import {
   Container,
@@ -19,7 +20,7 @@ const SavedBooks = () => {
   const { loading, data } = useQuery(GET_ME);
   const [ removeBook, {error} ] = useMutation(REMOVE_BOOK);
 
-  const userData = data?.me || [];
+  const userData = data?.me || {};
 
   // const [userData, setUserData] = useState({});
 
@@ -62,21 +63,19 @@ const SavedBooks = () => {
     }
 
     try {
-      const response = await removeBook({ variables: bookId });
+      const response = await removeBook({ 
+        variables: {bookId: bookId},
+        update: cache => {
+          const data = cache.readQuery({ query: GET_ME });
+          const userDataCache = data.me;
+          const savedBooksCache = userDataCache.savedBooks;
+          const updatedBookCache = savedBooksCache.filter((book) => book.bookId !== bookId);
+          data.me.savedBooks = updatedBookCache;
+          cache.writeQuery({ query: GET_ME , data: {data: {...data.me.savedBooks}}})
+        }
+       });
       
       removeBookId(bookId);
-
-    // try {
-    //   const response = await deleteBook(bookId, token);
-
-    //   if (!response.ok) {
-    //     throw new Error('something went wrong!');
-    //   }
-
-    //   const updatedUser = await response.json();
-    //   setUserData(updatedUser);
-    //   // upon success, remove book's id from localStorage
-    //   removeBookId(bookId);
     } catch (err) {
       console.error(err);
     }
@@ -86,6 +85,10 @@ const SavedBooks = () => {
   // if (userData.length === 0) {
   //   return <h2>LOADING...</h2>;
   // }
+
+  if (loading) {
+    return <h2>LOADING...</h2>;
+  }
 
   return (
     <>
