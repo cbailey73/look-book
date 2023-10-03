@@ -4,6 +4,7 @@ import { Form, Button, Alert } from 'react-bootstrap';
 
 // import { createUser } from '../utils/API';
 import { ADD_USER } from '../../utils/mutations';
+import { addUser, login } from '../../../../server/schemas/resolvers';
 
 import Auth from '../../utils/auth';
 
@@ -15,7 +16,7 @@ const SignupForm = () => {
   // set state for alert
   const [showAlert, setShowAlert] = useState(false);
 
-  const [login, { error, data }] = useMutation(ADD_USER);
+  const [addUser, { error, data }] = useMutation(ADD_USER);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -33,7 +34,8 @@ const SignupForm = () => {
     }
 
     try {
-      const data = await login({
+      const data = await addUser({
+
         variables: {
           ...userFormData
           // username: userFormData.username,
